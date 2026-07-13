@@ -90,12 +90,13 @@ describe("system prompt", () => {
 		await writeFile(paths.projectIndex, "- project uses Bun", "utf8");
 
 		const prompt = buildMemoryPrompt(loadMemorySnapshot(cwd, agentDir));
-		expect(prompt.startsWith("<memory_context>\n")).toBe(true);
+		expect(prompt.startsWith("<memory_context>\n\nPersistent memory")).toBe(true);
 		expect(prompt.endsWith("</memory_context>")).toBe(true);
 		expect(prompt).toContain(`<global_memory_index path="${paths.globalIndex}">`);
 		expect(prompt).toContain(`<project_memory_index path="${paths.projectIndex}">`);
 		expect(prompt).toContain("prefers concise replies");
 		expect(prompt).toContain("project uses Bun");
+		expect(prompt).toContain("standard file-reading and file-editing tools");
 		expect(prompt).not.toContain("there is no dedicated memory tool");
 		expect(prompt).not.toContain("Memory scopes:");
 		expect(prompt).toContain("Never save passwords");
